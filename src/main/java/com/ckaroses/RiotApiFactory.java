@@ -15,4 +15,11 @@ public class RiotApiFactory {
                 .requestInterceptor(new ApiKeyInterceptor(apiKey))
                 .target(Riot.class, region.getEndpoint());
     }
+
+    public static Riot getRiotApi(String urlBase, String apiKey) {
+        return Feign.builder()
+                .decoder(new GsonDecoder())
+                .requestInterceptor(new ApiKeyInterceptor(apiKey))
+                .target(Riot.class, urlBase);
+    }
 }
