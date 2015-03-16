@@ -1,10 +1,9 @@
 package com.ckaroses.RiotNA;
 
-import com.ckaroses.Riot;
-import com.ckaroses.RiotApiFactory;
+import com.ckaroses.*;
 import com.ckaroses.constant.Region;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
+import feign.Feign;
+import feign.gson.GsonDecoder;
 import org.junit.Before;
 
 /**
@@ -13,11 +12,21 @@ import org.junit.Before;
 public class RiotNATestBase {
 
     Riot riot;
+    static Long PHREAK_ID = 7428L;
+    static Long DYRUS_ID = 5908L;
+    static Long PHREAK_MATCH_ID = 1752492676L;
+    static String TSM_ID = "TEAM-e4936d7b-b80e-4367-a76c-5ccf7388c995";
+
+
 
     @Before
     public void before() throws Exception {
-        String apiKey = Resources.toString(this.getClass().getResource("apikey.txt"), Charsets.UTF_8);
-        riot = RiotApiFactory.getRiotApi(Region.NA, apiKey);
+        String apiKey = RiotApiKeyReader.getApiKey();
+        riot = Feign.builder()
+                .decoder(new GsonDecoder())
+                .requestInterceptor(new ApiRateLimitBlockingInterceptor(0.5))
+                .requestInterceptor(new ApiKeyInterceptor(apiKey))
+                .target(Riot.class, Region.NA.getEndpoint());
     }
 
 }

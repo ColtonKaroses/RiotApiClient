@@ -2,6 +2,7 @@ package com.ckaroses.RiotStatus;
 
 import com.ckaroses.Riot;
 import com.ckaroses.RiotApiFactory;
+import com.ckaroses.RiotApiKeyReader;
 import com.ckaroses.constant.Region;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -16,7 +17,7 @@ public class RiotStatusTestBase {
 
     @Before
     public void before() throws Exception {
-        String apiKey = Resources.toString(this.getClass().getResource("apikey.txt"), Charsets.UTF_8);
+        String apiKey = RiotApiKeyReader.getApiKey();
         riot = RiotApiFactory.getRiotApi("http://status.leagueoflegends.com", apiKey);
     }
 }
