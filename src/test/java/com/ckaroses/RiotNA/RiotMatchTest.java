@@ -18,4 +18,13 @@ public class RiotMatchTest extends RiotNATestBase {
         Assert.assertNotNull("The match DTO has not been received.", matchDetail);
     }
 
+
+    @Test
+    public void getMatchDetailAndTimelineTest() {
+        MatchDetail matchDetail = riot.matchById(Region.NA, PHREAK_MATCH_ID, true);
+        Assert.assertNotNull("The match DTO has not been received.", matchDetail);
+        Assert.assertNotNull("The timeline was not included.", matchDetail.getTimeline());
+    }
+
+
 }

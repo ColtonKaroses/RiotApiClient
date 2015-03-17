@@ -11,6 +11,7 @@ import com.ckaroses.dto.FeaturedGames.FeaturedGames;
 import com.ckaroses.dto.Game.RecentGames;
 import com.ckaroses.dto.League.League;
 import com.ckaroses.dto.Match.MatchDetail;
+import com.ckaroses.dto.MatchHistory.PlayerHistory;
 import com.ckaroses.dto.Status.Shard;
 import com.ckaroses.dto.Status.ShardStatus;
 import com.fasterxml.jackson.databind.deser.DataFormatReaders;
@@ -90,5 +91,26 @@ public interface Riot {
 
     @RequestLine("GET /api/lol/{region}/v2.2/match/{matchId}")
     MatchDetail matchById(@Param("region") Region region, @Param("matchId") Long matchId);
+
+    @RequestLine("GET /api/lol/{region}/v2.2/match/{matchId}?includeTimeline={includeTimeline}")
+    MatchDetail matchById(@Param("region") Region region, @Param("matchId") Long matchId,
+                          @Param("includeTimeline") Boolean includeTimeline);
+
+    @RequestLine("GET /api/lol/{region}/v2.2/matchhistory/{summonerId}")
+    PlayerHistory matchHistory(@Param("region") Region region, @Param("summonerIds") Long id);
+
+    @RequestLine("GET /api/lol/{region}/v2.2/matchhistory/{summonerId}?championIds={championIds}")
+    PlayerHistory matchHistory(@Param("region") Region region, @Param("summonerId") Long id,
+                               @Param(value = "championIds",
+                                       expander = CollectionToCommaSeparated.class) Collection<Long> championIds);
+
+    @RequestLine("GET /api/lol/{region}/v2.2/matchhistory/{summonerId}?championIds={championIds}&rankedQueues={rankedQueues}")
+    PlayerHistory matchHistory(@Param("region") Region region, @Param("summonerId") Long id,
+                               @Param(value = "championIds",
+                                       expander = CollectionToCommaSeparated.class) Collection<Long> championIds,
+                               @Param(value = "rankedQueues",
+                                       expander = CollectionToCommaSeparated.class) Collection<GameQueueType> rankedQueues);
+
+
 
 }
